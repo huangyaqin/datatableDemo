@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>datatable 测试</title>
+  <link href="bootstrap.css" rel="stylesheet" />
+  <link rel="stylesheet" href="test.css">
+</head>
+<body>
+
+<table id="example" class="table table-hover table-bordered dataTable dataTable-nosort" cellspacing="0" width="100%">
+  <thead>
+  <tr>
+    <th width="12%">广告名称</th>
+    <th width="12%">创建时间</th>
+    <th width="5%">金额</th>
+    <th width="5%">操作</th>
+  </tr>
+  </thead>
+  <tbody class="channel_re_table"></tbody>
+</table>
+
+
+
+<script src="jquery.js"></script>
+<script src="jquery.dataTables.min.js"></script>
+<script src="dataTables.bootstrap.min.js"></script><!--控制分页 样式-->
+<script src="bootstrap.min.js"></script>
+
+<script src="../js/toastr.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/base.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/login.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="test.js" type="text/javascript" charset="utf-8"></script> <!--封装 接口 api-->
+
+
+<script type="text/javascript">
+
+$.chan.test();
+
+</script>
+</body>
+</html>

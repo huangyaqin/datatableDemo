@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>测试页面</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/test.css">
+ 
+</head>
+<body>
+<table id="example" class="table table-hover table-bordered dataTable dataTable-nosort" cellspacing="0" width="100%">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Position</th>
+    <th>Office</th>
+    <th>Extn.</th>
+    <th>Start date</th>
+    <th>Salary</th>
+  </tr>
+  </thead>
+  <tbody>
+ 
+  </tbody>
+</table>
+</p>
+ 
+<script type="text/javascript" src="//code.jquery.com/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src=" //cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "ajax": {
+            "url": "test.json",
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "name" },
+            { "data": "position" },
+            { "data": "office" },
+            { "data": "extn" },
+            { "data": "start_date" },
+            { "data": "salary" }
+        ]
+    } );
+} );
+</script>
+</body>
+</html>

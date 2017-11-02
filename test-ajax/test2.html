@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>datatable 测试</title>
+  <link href="bootstrap.css" rel="stylesheet" />
+  <link rel="stylesheet" href="test.css">
+</head>
+<body>
+
+<table id="example" class="table table-hover table-bordered dataTable dataTable-nosort" cellspacing="0" width="100%">
+  <thead>
+  <tr>
+    <th>广告名称</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+
+<script src="jquery.js"></script>
+<script src="jquery.dataTables.min.js"></script>
+<script src="dataTables.bootstrap.min.js"></script><!--控制分页 样式-->
+<script src="bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+      /*
+        修改ajax请求的url
+        需要 传入的参数：所有数据的总数 param.pageSize
+        
+      */
+        var params={};
+        $("#example").dataTable({
+          "sDom": 'rt<"bottom"ilp<"clear">>',
+          language: datatables_lang,  //提示信息
+          processing: true,//是否显示加载中提示
+          autoWidth: false,//是否自动计算表格各列宽度
+          info: true,//是否显示页数信息
+          pagingType:"full_numbers",//分页样式的类型
+          pageLength :10,//默认每页显示多少条记录
+          searching: false,//是否显示搜索框
+          ordering:false,//是否允许排序
+          serverSide: true,//是否从服务器获取数据
+          stateSave: false,//页面重载后保持当前页
+          lengthChange: true,//是否显示每页大小的下拉框
+          lengthMenu: [ 10, 15,25, 50, 75, 100 ],//长度菜单
+          responsive: true,
+          scrollX: true,//横向滑动
+          ajax: function (data, callback, settings){
+            //封装请求参数
+            var param = params;
+
+            //注释动态的数据总数
+            //param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            ////param.start = data.start;//开始的记录序号
+            //param.pageNum = (data.start / data.length)+1;//当前页码
+						
+						param.pageSize = 100;//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.pageNum = 1;//当前页码
+						
+            console.log(param);
+            //ajax请求数据
+              $.ajax({
+                type: "get",
+                url: "http://123.206.255.231:8080/basjoo/global/getTimestamp",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                  console.log(result);
+                  //封装返回数据
+                  var returnData = {};
+                  returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                  returnData.recordsTotal = 1;// 返回数据全部记录 这里先定死 result.data.total
+                  returnData.recordsFiltered = 1;//查询返回数据全部记录，记录分页数  同上
+
+                  /*以下部分 数据为假数据 写法*/
+
+                  // returnData.data = [];//返回的数据列表
+                  // listdata = returnData.data;
+                  // var text = '[{"timestamp":"201703231919180010000001"}]';
+                  // var newData = JSON.parse(text);
+                  // returnData.data = newData;//返回的数据列表
+                  // listdata = returnData.data;
+
+                  /*以下部分 数据从url 获取*/
+                  returnData.data = result.data;
+
+                  // 不存在数据或者异常
+                  if(result.err_code){
+                      callback(returnData);
+                      return false;
+                  }
+                  //console.log(returnData);
+                  //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                  //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                  callback(returnData);
+
+                }
+              });
+          },
+          //列表表头字段
+          columns: [
+            {"data": "timestamp"},
+          ]
+        });
+
+
+/*
+          ajax: function (data, callback, settings){
+            //封装请求参数
+            param.map.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            //param.start = data.start;//开始的记录序号
+            param.map.pageNo = (data.start / data.length)+1;//当前页码
+            // 将参数进行签名
+            param = basjooTalk.sign(param);
+            //console.log(param);
+            //ajax请求数据
+            $.ajax({
+                url: baseUrl,
+                data: JSON.stringify(param),
+                contentType: 'application/json;charset=UTF-8',
+                dataType: "json",
+                type: "post",
+                async: false,
+                success: function (result) {
+                  console.log(result);
+                  //封装返回数据
+                  var returnData = {};
+                  returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                  if (jQuery.isEmptyObject(result.data)) {
+                      returnData.recordsTotal = 0;//返回数据全部记录
+                      returnData.recordsFiltered = 0;//查询返回数据全部记录，记录分页数
+                      returnData.data = result.data;//返回的数据列表
+                      callback(returnData);
+                  }
+                  returnData.recordsTotal = result.data.total;//返回数据全部记录
+                  returnData.recordsFiltered = result.data.total;//查询返回数据全部记录，记录分页数
+                  returnData.data = result.data.list;//返回的数据列表
+                  //console.log(returnData);
+                  //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                  //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                  callback(returnData);
+              }
+            });
+          },
+
+*/
+</script>
+
+</body>
+</html>

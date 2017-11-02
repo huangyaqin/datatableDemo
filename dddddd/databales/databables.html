@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>测试页面</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+</head>
+<body>
+<table id="example" class="table table-hover table-bordered dataTable dataTable-nosort" cellspacing="0" width="100%">
+  <thead>
+  <tr>
+    <th width="12%">广告名称</th>
+    <th width="12%">创建时间</th>
+    <th width="5%">金额</th>
+    <th width="8.5%">支付状态</th>
+    <th width="12%">支付时间</th>
+    <th width="7.5%">状态</th>
+    <th width="20%">操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</p>
+<!-- <link rel="stylesheet" href="C:/Users/fishman/Desktop/datatable/css/daterangepicker.css"/>
+<script type="text/javascript" src="C:/Users/fishman/Desktop/datatable/css/moment.js"></script>
+<script type="text/javascript" src="C:/Users/fishman/Desktop/datatable/css/daterangepicker.js"></script> -->
+
+<!--或者下载到本地，下面有下载地址-->
+<!-- DataTables CSS -->
+<link href="css/bootstrap.css" rel="stylesheet" />
+<link href="css/dataTables.bootstrap.css" rel="stylesheet" />
+
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$.fn.dtconfig =  {
+    //  processing: true,//是否显示加载中提示
+    //  autoWidth: false,//是否自动计算表格各列宽度
+    //  info: true,//是否显示页数信息
+    //  pagingType:"full_numbers",
+    //  pageLength :10,//默认每页显示多少条记录
+    //  searching: false,//是否显示搜索框
+    //  ordering:false,//是否允许排序
+    //  serverSide: true,//是否从服务器获取数据
+    //  stateSave: false,//页面重载后保持当前页
+    //  lengthChange: true,//是否显示每页大小的下拉框
+    //  lengthMenu: [ 10, 15,25, 50, 75, 100 ],//长度菜单
+    //  language: datatables_lang,
+    //  responsive: true,
+    //  scrollX: true,//横向滑动
+     //deferRender: true,//控制表格的延迟渲染，可以提高初始化的速度
+     //dom: 'lBrtip',//DataTables 各模块显示位置
+     //"sDom":'rt<"bottom"ilp<"clear">>',
+     //buttons: [// DataTables Button 扩展，使用时，需要引入插件相关的JS
+     //          //{
+     //          //    extend: "copy",
+     //          //    className: "btn-sm"
+     //          //},
+     //          //{
+     //          //    extend: "csv",
+     //          //    className: "btn-sm"
+     //          //},
+     //          {
+     //              extend: "excel",
+     //              text: "导出本页(Excel)",
+     //              className: "btn-primary",
+     //                filename:"人员表"
+     //          },
+     //          //{
+     //          //    extend: "pdfHtml5",
+     //          //    className: "btn-sm"
+     //          //},
+     //          //{
+     //          //    extend: "print",
+     //          //    className: "btn-sm"
+     //          //},
+     //]
+ }
+</script>
+
+<script type="text/javascript">
+  var params={};
+        function test(){
+        $("#example").dataTable({
+          "sDom": 'rt<"bottom"ilp<"clear">>',
+          language: datatables_lang,  //提示信息
+          processing: true,//是否显示加载中提示
+          autoWidth: false,//是否自动计算表格各列宽度
+          info: true,//是否显示页数信息
+          pagingType:"full_numbers",//分页样式的类型
+          pageLength :3,//默认每页显示多少条记录
+          searching: false,//是否显示搜索框
+          ordering:false,//是否允许排序
+          serverSide: true,//是否从服务器获取数据
+          stateSave: false,//页面重载后保持当前页
+          lengthChange: true,//是否显示每页大小的下拉框
+          lengthMenu: [ 3, 15,25, 50, 75, 100 ],//长度菜单
+          responsive: true,
+          scrollX: true,//横向滑动
+          ajax: function (data, callback, settings){
+            //封装请求参数
+            var param = params;
+            param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            //param.start = data.start;//开始的记录序号
+            param.pageNum = (data.start / data.length)+1;//当前页码
+            //console.log(param);
+            //ajax请求数据
+            $.ajax({
+                type: "get",
+                url: "http://123.206.255.231:8080/basjoo/global/getTimestamp",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                  //封装返回数据
+                  var returnData = {};
+                  returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                  returnData.recordsTotal = 2;//返回数据全部记录
+                  returnData.recordsFiltered = 5;//后台不实现过滤功能，每次查询均视作全部结果
+                  returnData.data = [];//返回的数据列表
+                  listdata = returnData.data;
+                  // 不存在数据或者异常
+                  if(result.err_code){
+                      callback(returnData);
+                      return false;
+                  }
+                  returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                  returnData.recordsTotal = 2;//返回数据全部记录
+                  returnData.recordsFiltered = 5;//后台不实现过滤功能，每次查询均视作全部结果
+                  var text = '[{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""},{"id":"201703231919180010000001","createTime":1490267958000,"advertiserId":"5520606008180737","advertiserOrgName":"测试广告商7","merchantId":"5478427013414913","merchantOrgName":"直播角测试商户1","adName":"蒙倒驴系列","adDesc":"蒙倒驴系列","adCoverUrl":"","state":2,"rejectReason":"","videoLength":0,"videoFee":200,"additionalService":"","additionalFee":0,"amount":100200,"discount":10,"finalAmount":100200,"payState":3,"payTime":1490267958000,"refundTime":0,"videoUrl":""}]';
+                  var newData = JSON.parse(text);
+                  returnData.data = newData;//返回的数据列表
+                  listdata = returnData.data;
+                  //console.log(returnData);
+                  //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                  //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                  callback(returnData);
+
+              }
+            });
+          },
+          //列表表头字段
+          columns: [
+            {"data": "adName"},
+            {"data": "createTime"},
+            {"data": "finalAmount"},
+            {"data":"payState"},
+            {"data": "payTime"},
+            {"data": "state"},
+            {"data": "id"}
+          ]
+        });
+}
+</script>
+</body>
+</html>
